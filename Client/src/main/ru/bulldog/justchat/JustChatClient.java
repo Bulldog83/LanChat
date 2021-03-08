@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class JustChat extends Application {
+public class JustChatClient extends Application {
 
 	public static void main(String[] args) {
 		launch(args);
