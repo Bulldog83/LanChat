@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.*?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0"
+            prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ru.bulldog.justchat.controllers.MainController">
+
+   <TextArea fx:id="txtChatArea" editable="false" layoutX="14.0" layoutY="14.0" prefHeight="703.0" prefWidth="996.0"
+             AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0"
+             AnchorPane.topAnchor="14.0"/>
+   <TextField fx:id="txtMessage" layoutX="14.0" layoutY="729.0" onKeyReleased="#txtFieldSendMessage" prefHeight="25.0"
+              prefWidth="909.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0"
+              AnchorPane.rightAnchor="100.0"/>
+   <Button layoutX="934.0" layoutY="729.0" mnemonicParsing="false" onAction="#btnSendMessage"
+           prefHeight="25.0" prefWidth="76.0" text="Send" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0"/>
+</AnchorPane>
