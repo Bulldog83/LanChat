@@ -1,0 +1,5 @@
+.h-box {
+    -fx-alignment: center-left;
+    -fx-padding: 10px 0 0 0;
+    -fx-spacing: 5px;
+}

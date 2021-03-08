@@ -1,5 +1,6 @@
 package ru.bulldog.justchat.controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -30,5 +31,8 @@ public class MainController {
 		}
 		txtMessage.requestFocus();
 		txtMessage.clear();
+	}
+
+	public void tryLogin(ActionEvent actionEvent) {
 	}
 }
