@@ -1,4 +1,4 @@
-package ru.bulldog.justchat;
+package ru.bulldog.justchat.server.network;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,7 +7,7 @@ public class AuthInfo {
 
 	private final static Map<String, String> users = new HashMap<>();
 
-	public static boolean checkLogin(String login, String password) {
+	public static boolean checkAuthData(String login, String password) {
 		if (!users.containsKey(login)) return false;
 		return users.get(login).equals(password);
 	}

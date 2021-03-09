@@ -24,6 +24,7 @@ public class Logger {
 
 	public void error(String message, Throwable ex) {
 		System.out.println(prefix + "[ERROR]: " + message + ": " + ex.getMessage());
+		ex.printStackTrace(System.out);
 	}
 
 	public Class<?> getOwner() {

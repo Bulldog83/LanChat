@@ -1,6 +1,5 @@
-package ru.bulldog.justchat.network;
+package ru.bulldog.justchat.server.network;
 
-import ru.bulldog.justchat.AuthInfo;
 import ru.bulldog.justchat.Logger;
 
 import java.io.Closeable;
@@ -11,35 +10,42 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NetworkHandler implements Closeable {
+public class ServerNetworkHandler implements Closeable {
 
-	private final static Logger LOGGER = new Logger(NetworkHandler.class);
+	private final static Logger LOGGER = new Logger(ServerNetworkHandler.class);
 
 	private final Map<String, ChatClient> clients;
 
-	public NetworkHandler() {
+	private boolean closed = false;
+
+	public ServerNetworkHandler() {
 		this.clients = new HashMap<>();
 	}
 
 	public void onClientJoin(ChatClient client) {
 		new Thread(() -> {
 			try {
-				while (!client.socket.isClosed()) {
+				while (!closed) {
 					String loginInfo = client.input.readUTF();
 					if (loginInfo.startsWith("/login")) {
 						String[] loginData = loginInfo.substring(7).split(":");
 						if (loginData.length < 3) {
 							client.sendMessage("Server: Wrong auth data.");
 						} else {
-							if (AuthInfo.checkLogin(loginData[0], loginData[1])) {
+							String nickName = loginData[2];
+							if (clients.containsKey(nickName)) {
+								client.sendMessage("/fail Nickname " + nickName + " already registered.");
+							} else if (AuthInfo.checkAuthData(loginData[0], loginData[1])) {
+								sendMessage(nickName + " join.");
+								client.output.writeUTF("/success");
 								client.networkHandler = this;
-								client.nickName = loginData[2];
-								clients.put(loginData[2], client);
+								client.nickName = nickName;
 								client.listen();
-								System.out.println(loginData[2] + " successfully authorized.");
+								clients.put(nickName, client);
+								LOGGER.info(nickName + " successfully authorized.");
 								break;
 							} else {
-								client.sendMessage("Server: Invalid login or password.");
+								client.sendMessage("/fail Invalid login or password.");
 								LOGGER.warn("Login failed: " + loginData[0] + " - " + loginData[1]);
 							}
 						}
@@ -47,18 +53,21 @@ public class NetworkHandler implements Closeable {
 					client.sendMessage("Server: Wrong auth data.");
 				}
 			} catch (IOException ex) {
-				LOGGER.error("Error client logging in", ex);
+				if (!closed) {
+					LOGGER.error("Error client logging in", ex);
+				}
 			}
-		});
+		}, "Client Login Listener").start();
 	}
 
 	public void onClientLeave(ChatClient client) {
 		clients.remove(client.nickName);
+		sendMessage(client.nickName + " leave.");
 	}
 
 	public void sendMessage(String message) {
 		clients.values().forEach(client -> {
-			if (!client.socket.isClosed()) {
+			if (client.listening) {
 				client.sendMessage(message);
 			}
 		});
@@ -67,6 +76,7 @@ public class NetworkHandler implements Closeable {
 	public void sendMessage(ChatClient sender, String nickName, String message) {
 		if (clients.containsKey(nickName)) {
 			clients.get(nickName).sendMessage(message);
+			clients.get(sender.nickName).sendMessage(message);
 		} else {
 			sender.sendMessage("Server: No clients with nickname '" + nickName + "' found.");
 		}
@@ -74,9 +84,14 @@ public class NetworkHandler implements Closeable {
 
 	@Override
 	public void close() throws IOException {
-		for (ChatClient client : clients.values()) {
-			client.sendMessage("Server closed.");
-			client.close();
+		if (!closed) {
+			closed = true;
+			for (ChatClient client : clients.values()) {
+				if (client.listening) {
+					client.sendMessage("Server closed.");
+					client.close();
+				}
+			}
 		}
 	}
 
@@ -85,7 +100,7 @@ public class NetworkHandler implements Closeable {
 		private final DataInputStream input;
 		private final DataOutputStream output;
 
-		private NetworkHandler networkHandler;
+		private ServerNetworkHandler networkHandler;
 		private String nickName;
 
 		private boolean listening = true;
@@ -97,6 +112,7 @@ public class NetworkHandler implements Closeable {
 		}
 
 		private void listen() {
+			listening = true;
 			new Thread(() -> {
 				try {
 					while (listening) {
@@ -104,6 +120,7 @@ public class NetworkHandler implements Closeable {
 						if (!inputMessage.trim().equals("")) {
 							if (inputMessage.equals("/quit")) {
 								networkHandler.onClientLeave(this);
+								LOGGER.info("Client disconnected: " + nickName);
 								close();
 								break;
 							} else {
@@ -120,9 +137,12 @@ public class NetworkHandler implements Closeable {
 						}
 					}
 				} catch (IOException ex) {
-					LOGGER.error("Error read message from " + nickName, ex);
+					if (listening) {
+						LOGGER.error("Error read message from " + nickName, ex);
+						listening = false;
+					}
 				}
-			});
+			}, "Client Message Listener").start();
 		}
 
 		public void sendMessage(String message) {
