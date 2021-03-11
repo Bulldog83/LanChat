@@ -9,12 +9,16 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ServerNetworkHandler implements Closeable {
 
 	private final static Logger LOGGER = new Logger(ServerNetworkHandler.class);
+	private final static int TIMEOUT = 60000;
 
 	private final Map<String, ClientHandler> clients;
 	private final AuthService authService;
@@ -27,13 +31,23 @@ public class ServerNetworkHandler implements Closeable {
 	}
 
 	public void onClientJoin(ClientHandler client) {
-		//client.socket.setSoTimeout(60000);
 		new Thread(() -> {
 			try {
+				LOGGER.info("Client connected with address: " + client.socket.getInetAddress());
+				client.socket.setSoTimeout(TIMEOUT);
 				while (!closed) {
 					String loginInfo = client.input.readUTF();
 					if (loginInfo.startsWith("/register")) {
-
+						String[] registerData = loginInfo.substring(10).split(":");
+						if (registerData.length < 3) {
+							client.sendMessage("Server: Wrong registration data.");
+						} else if (authService.registerUser(registerData[0], registerData[1], registerData[2])) {
+							client.socket.setSoTimeout(0);
+							registerClient(client, registerData[2]);
+							break;
+						} else {
+							client.sendMessage("Server: Login or Nickname already used.");
+						}
 					} else if (loginInfo.startsWith("/login")) {
 						String[] loginData = loginInfo.substring(7).split(":");
 						if (loginData.length < 2) {
@@ -42,8 +56,9 @@ public class ServerNetworkHandler implements Closeable {
 							String nickName = authService.getNickname(loginData[0], loginData[1]);
 							if (nickName != null) {
 								if (clients.containsKey(nickName)) {
-									client.sendMessage("/fail Nickname " + nickName + " already logged in.");
+									client.sendMessage("/fail User " + nickName + " already logged in.");
 								} else {
+									client.socket.setSoTimeout(0);
 									registerClient(client, nickName);
 									break;
 								}
@@ -55,6 +70,8 @@ public class ServerNetworkHandler implements Closeable {
 					}
 					client.sendMessage("Server: Wrong auth data.");
 				}
+			} catch (SocketTimeoutException ex) {
+				LOGGER.info("Client disconnected by timeout: " + client.socket.getInetAddress());
 			} catch (IOException ex) {
 				if (!closed) {
 					LOGGER.error("Error client logging in", ex);
@@ -64,7 +81,7 @@ public class ServerNetworkHandler implements Closeable {
 	}
 
 	private void registerClient(ClientHandler client, String nickName) throws IOException {
-		client.output.writeUTF("/success " + nickName);
+		client.sendMessage("/success " + nickName);
 		client.networkHandler = this;
 		client.nickName = nickName;
 		client.listen();

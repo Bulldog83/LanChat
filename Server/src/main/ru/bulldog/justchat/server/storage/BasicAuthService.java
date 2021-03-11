@@ -11,6 +11,7 @@ public class BasicAuthService implements AuthService {
 
 	@Nullable
 	public String getNickname(String login, String password) {
+		login = login.toLowerCase();
 		if (!users.containsKey(login)) return null;
 		if (users.get(login).password.equals(password)) {
 			return users.get(login).nickname;

@@ -24,16 +24,18 @@ public class ClientNetworkHandler {
 		this.messageListener = messageListener;
 	}
 
-	public boolean joinServer(String address, String login, String password, String nickName) {
+	public boolean joinServer(String address, String login, String password) {
 		try {
 			connection = new Socket(address, ChatServer.PORT);
 			if (connection.isConnected()) {
 				dataInput = new DataInputStream(connection.getInputStream());
 				dataOutput = new DataOutputStream(connection.getOutputStream());
-				String loginData = String.format("/login %s:%s:%s", login, password, nickName);
+				String loginData = String.format("/login %s:%s", login, password);
 				dataOutput.writeUTF(loginData);
 				String requestData = dataInput.readUTF();
-				if (requestData.equals("/success")) {
+				if (requestData.startsWith("/success")) {
+					String nickName = requestData.substring(9);
+					messageListener.onJoinServer(nickName);
 					messageListener.onMessageReceived("You successfully join server.");
 					onJoinServer();
 					return true;
@@ -58,7 +60,9 @@ public class ClientNetworkHandler {
 			try {
 				while (listening) {
 					String message = dataInput.readUTF();
-					if (messageListener != null) {
+					if (message.startsWith("/")) {
+						processSystemMsg(message);
+					} else if (messageListener != null) {
 						messageListener.onMessageReceived(message);
 					}
 				}
@@ -69,6 +73,17 @@ public class ClientNetworkHandler {
 				}
 			}
 		}, "Server Message Listener").start();
+	}
+
+	private void processSystemMsg(String message) {
+		if (message.startsWith("/clientjoin")) {
+			String nickName = message.substring(12);
+			messageListener.onMessageReceived(nickName + " join.");
+		}
+		if (message.startsWith("/clientleave")) {
+			String nickName = message.substring(13);
+			messageListener.onMessageReceived(nickName + " leave.");
+		}
 	}
 
 	public void onLeaveServer() {

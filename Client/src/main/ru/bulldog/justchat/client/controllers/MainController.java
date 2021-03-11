@@ -14,11 +14,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import ru.bulldog.justchat.client.network.ClientNetworkHandler;
+import ru.bulldog.justchat.client.network.MessageListener;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainController implements Initializable {
+public class MainController implements Initializable, MessageListener {
 
 	@FXML
 	public TextArea txtChatArea;
@@ -68,7 +69,6 @@ public class MainController implements Initializable {
 		String address = txtServer.getText().trim();
 		String login = txtLogin.getText().trim();
 		String password = txtPassword.getText().trim();
-		String nickName = txtNickname.getText().trim();
 		if (address.equals("")) {
 			txtChatArea.appendText("Error: address can't be empty.\n");
 			return;
@@ -81,19 +81,20 @@ public class MainController implements Initializable {
 			txtChatArea.appendText("Error: password can't be empty.\n");
 			return;
 		}
-		if (nickName.equals("")) {
-			txtChatArea.appendText("Error: nickname can't be empty.\n");
-			return;
-		}
-		if (networkHandler.joinServer(address, login, password, nickName)) {
-			onJoinServer(nickName);
+		if (networkHandler.joinServer(address, login, password)) {
 			txtPassword.clear();
 		} else {
 			onLeaveServer();
 		}
 	}
 
-	private void onJoinServer(String nickName) {
+	@Override
+	public void onMessageReceived(String message) {
+		txtChatArea.appendText(message + "\n");
+	}
+
+	@Override
+	public void onJoinServer(String nickName) {
 		labelNickname.setText(nickName);
 		Platform.runLater(() -> {
 			loginForm.setVisible(false);
@@ -115,8 +116,6 @@ public class MainController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		networkHandler = new ClientNetworkHandler(message -> {
-			txtChatArea.appendText(message + "\n");
-		});
+		networkHandler = new ClientNetworkHandler(this);
 	}
 }
