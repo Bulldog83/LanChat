@@ -14,6 +14,7 @@ import java.net.SocketTimeoutException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ServerNetworkHandler implements Closeable {
 
@@ -40,13 +41,14 @@ public class ServerNetworkHandler implements Closeable {
 					if (loginInfo.startsWith("/register")) {
 						String[] registerData = loginInfo.substring(10).split(":");
 						if (registerData.length < 3) {
-							client.sendMessage("Server: Wrong registration data.");
+							client.sendMessage("/fail Wrong registration data.");
 						} else if (authService.registerUser(registerData[0], registerData[1], registerData[2])) {
+							LOGGER.info("Registered new user: " + registerData[2]);
 							client.socket.setSoTimeout(0);
 							registerClient(client, registerData[2]);
 							break;
 						} else {
-							client.sendMessage("Server: Login or Nickname already used.");
+							client.sendMessage("/fail Login or Nickname already used.");
 						}
 					} else if (loginInfo.startsWith("/login")) {
 						String[] loginData = loginInfo.substring(7).split(":");
@@ -81,12 +83,14 @@ public class ServerNetworkHandler implements Closeable {
 	}
 
 	private void registerClient(ClientHandler client, String nickName) throws IOException {
+		client.socket.setSoTimeout(0);
 		client.sendMessage("/success " + nickName);
 		client.networkHandler = this;
 		client.nickName = nickName;
 		client.listen();
 		clients.put(nickName, client);
 		sendMessage("/clientjoin " + nickName);
+		sendMessage("/users " + String.join(":", clients.keySet()));
 		LOGGER.info(nickName + " successfully authorized.");
 	}
 
@@ -105,6 +109,7 @@ public class ServerNetworkHandler implements Closeable {
 
 	public void sendMessage(ClientHandler sender, String nickName, String message) {
 		if (clients.containsKey(nickName)) {
+			message = "/private " + message;
 			clients.get(nickName).sendMessage(message);
 			if (!sender.nickName.equals(nickName)) {
 				sender.sendMessage(message);

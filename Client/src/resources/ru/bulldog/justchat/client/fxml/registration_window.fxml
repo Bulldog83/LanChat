@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="250.0" prefWidth="340.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.bulldog.justchat.client.controllers.RegistrationController">
+   <children>
+      <Label layoutX="37.0" layoutY="23.0" text="Server" />
+      <Label layoutX="18.0" layoutY="57.0" text="Nickname" />
+      <Label layoutX="41.0" layoutY="90.0" text="Login" />
+      <Label layoutX="21.0" layoutY="122.0" text="Password" />
+      <Label fx:id="labStatus" alignment="CENTER" contentDisplay="CENTER" layoutX="7.0" layoutY="160.0" prefHeight="17.0" prefWidth="323.0" textAlignment="CENTER" />
+      <TextField fx:id="txtServer" layoutX="79.0" layoutY="19.0" prefHeight="25.0" prefWidth="245.0" AnchorPane.leftAnchor="80.0" />
+      <TextField fx:id="txtNickname" layoutX="79.0" layoutY="53.0" prefHeight="25.0" prefWidth="245.0" AnchorPane.leftAnchor="80.0" />
+      <TextField fx:id="txtLogin" layoutX="79.0" layoutY="86.0" prefHeight="25.0" prefWidth="245.0" AnchorPane.leftAnchor="80.0" />
+      <PasswordField fx:id="txtPassword" layoutX="79.0" layoutY="118.0" prefHeight="25.0" prefWidth="245.0" AnchorPane.leftAnchor="80.0" />
+      <Button layoutX="47.0" layoutY="197.0" mnemonicParsing="false" onAction="#doRegistration" prefHeight="25.0" prefWidth="120.0" text="Registration" />
+      <Button layoutX="173.0" layoutY="197.0" mnemonicParsing="false" onAction="#windowClose" prefHeight="25.0" prefWidth="120.0" text="Cancel" />
+   </children>
+</AnchorPane>

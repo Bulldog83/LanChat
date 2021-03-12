@@ -2,7 +2,6 @@ package ru.bulldog.justchat;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 public class Logger {
 
@@ -42,6 +41,6 @@ public class Logger {
 	}
 
 	static {
-		DATE_FORMAT = new SimpleDateFormat("[HH:mm:ss dd.MM.yyyy]");
+		DATE_FORMAT = new SimpleDateFormat("HH:mm:ss dd.MM.yyyy ");
 	}
 }

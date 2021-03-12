@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="mainWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.bulldog.justchat.client.controllers.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.bulldog.justchat.client.controllers.MainController">
    <children>
-      <TextArea fx:id="txtChatArea" editable="false" layoutX="14.0" layoutY="14.0" prefHeight="703.0" prefWidth="996.0" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+      <TextArea fx:id="txtChatArea" editable="false" layoutX="14.0" layoutY="14.0" prefHeight="699.0" prefWidth="790.0" wrapText="true" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="220.0" AnchorPane.topAnchor="14.0" />
+      <ListView fx:id="usersList" layoutX="810.0" layoutY="14.0" onMouseClicked="#addPrivate" prefHeight="699.0" prefWidth="200.0" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="810.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></ListView>
       <HBox fx:id="loginForm" layoutX="14.0" layoutY="718.0" prefHeight="41.0" prefWidth="996.0" styleClass="h-box" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
          <children>
-            <Label styleClass="login-label" text="Address" />
+            <Label styleClass="login-label" text="Server" />
             <TextField fx:id="txtServer" promptText="Server address" />
             <Label text="Login">
                <styleClass>
@@ -27,16 +32,12 @@
                   <Insets left="5.0" />
                </HBox.margin></Label>
             <PasswordField fx:id="txtPassword" promptText="Password" />
-            <Label styleClass="login-label" text="Nickname">
+            <Button mnemonicParsing="false" onAction="#tryLogin" prefHeight="25.0" prefWidth="120.0" text="Login">
                <HBox.margin>
-                  <Insets left="5.0" />
-               </HBox.margin></Label>
-            <TextField fx:id="txtNickname" promptText="Nickname" />
-            <Button mnemonicParsing="false" onAction="#tryLogin" prefHeight="25.0" prefWidth="100.0" text="Login">
-               <HBox.margin>
-                  <Insets left="10.0" />
+                  <Insets left="10.0" right="5.0" />
                </HBox.margin>
             </Button>
+            <Button mnemonicParsing="false" onAction="#openRegistrationWindow" prefHeight="25.0" prefWidth="120.0" text="Registration" />
          </children>
       </HBox>
       <HBox fx:id="chatForm" layoutX="14.0" layoutY="722.0" prefHeight="41.0" prefWidth="996.0" styleClass="h-box" visible="false" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
@@ -46,7 +47,7 @@
                   <Insets />
                </HBox.margin>
             </Label>
-            <TextField fx:id="txtMessage" onKeyReleased="#txtFieldSendMessage" prefHeight="25.0" prefWidth="790.0" promptText="Write message" />
+            <TextField fx:id="txtMessage" onKeyReleased="#txtFieldSendMessage" prefHeight="25.0" prefWidth="848.0" promptText="Write message" />
             <Button mnemonicParsing="false" onAction="#btnSendMessage" prefHeight="25.0" prefWidth="76.0" text="Send" />
          </children>
       </HBox>
