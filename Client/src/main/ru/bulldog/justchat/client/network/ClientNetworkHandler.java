@@ -1,5 +1,6 @@
 package ru.bulldog.justchat.client.network;
 
+import com.sun.istack.internal.Nullable;
 import ru.bulldog.justchat.Logger;
 import ru.bulldog.justchat.server.network.ChatServer;
 
@@ -7,45 +8,75 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ClientNetworkHandler {
 
 	private final static Logger LOGGER = new Logger(ClientNetworkHandler.class);
 
+	private final SimpleDateFormat dateFormat;
 	private Socket connection;
 	private DataInputStream dataInput;
 	private DataOutputStream dataOutput;
 
 	private final MessageListener messageListener;
 
-	private boolean listening = true;
+	private boolean listening = false;
 
 	public ClientNetworkHandler(MessageListener messageListener) {
+		this.dateFormat = new SimpleDateFormat("HH:mm:ss ");
 		this.messageListener = messageListener;
 	}
 
-	public boolean joinServer(String address, String login, String password, String nickName) {
-		try {
+	private void createConnection(String address) throws IOException {
+		if (!isConnected()) {
 			connection = new Socket(address, ChatServer.PORT);
-			if (connection.isConnected()) {
-				dataInput = new DataInputStream(connection.getInputStream());
-				dataOutput = new DataOutputStream(connection.getOutputStream());
-				String loginData = String.format("/login %s:%s:%s", login, password, nickName);
+			dataInput = new DataInputStream(connection.getInputStream());
+			dataOutput = new DataOutputStream(connection.getOutputStream());
+		}
+	}
+
+	private boolean processRequest(MessageListener statusListener) throws IOException {
+		String requestData = dataInput.readUTF();
+		if (requestData.startsWith("/success")) {
+			String nickName = requestData.substring(9);
+			messageListener.onJoinServer(nickName);
+			messageListener.onMessageReceived("You successfully join server.");
+			onJoinServer();
+			return true;
+		}
+		if (requestData.startsWith("/fail")) {
+			String requestMessage = requestData.substring(6);
+			statusListener.onMessageReceived("Server: " + requestMessage);
+		} else {
+			statusListener.onMessageReceived("Wrong server request data.");
+		}
+		return false;
+	}
+
+	public boolean joinServer(String address, String login, String password) {
+		try {
+			createConnection(address);
+			if (isConnected()) {
+				String loginData = String.format("/login %s:%s", login, password);
 				dataOutput.writeUTF(loginData);
-				String requestData = dataInput.readUTF();
-				if (requestData.equals("/success")) {
-					messageListener.onMessageReceived("You successfully join server.");
-					onJoinServer();
-					return true;
-				}
-				if (requestData.startsWith("/fail")) {
-					String requestMessage = requestData.substring(6);
-					messageListener.onMessageReceived("Server: " + requestMessage);
-				} else {
-					messageListener.onMessageReceived("Wrong server request data.");
-				}
+				return processRequest(messageListener);
 			}
-			return false;
+		} catch (IOException ex) {
+			LOGGER.error("Connection error", ex);
+		}
+		return false;
+	}
+
+	public boolean doRegistration(MessageListener statusListener, String address, String login, String password, String nickName) {
+		try {
+			createConnection(address);
+			if (isConnected()) {
+				String registerData = String.format("/register %s:%s:%s", login, password, nickName);
+				dataOutput.writeUTF(registerData);
+				return processRequest(statusListener);
+			}
 		} catch (IOException ex) {
 			LOGGER.error("Connection error", ex);
 		}
@@ -58,7 +89,9 @@ public class ClientNetworkHandler {
 			try {
 				while (listening) {
 					String message = dataInput.readUTF();
-					if (messageListener != null) {
+					if (message.startsWith("/")) {
+						processSystemMsg(message);
+					} else if (messageListener != null) {
 						messageListener.onMessageReceived(message);
 					}
 				}
@@ -71,8 +104,17 @@ public class ClientNetworkHandler {
 		}, "Server Message Listener").start();
 	}
 
+	private void processSystemMsg(String message) {
+		if (message.startsWith("/private")) {
+			messageListener.onMessageReceived("[*]" + message.substring(9));
+		}
+		if (message.startsWith("/client") || message.startsWith("/users")) {
+			messageListener.onMessageReceived(message);
+		}
+	}
+
 	public void onLeaveServer() {
-		if (listening) {
+		if (isConnected() && listening) {
 			sendMessage("/quit");
 			try {
 				connection.close();
@@ -85,6 +127,10 @@ public class ClientNetworkHandler {
 		}
 	}
 
+	public boolean isConnected() {
+		return connection != null && connection.isConnected();
+	}
+
 	public boolean sendMessage(String message) {
 		try {
 			if (!message.trim().equals("")) {
@@ -95,5 +141,9 @@ public class ClientNetworkHandler {
 			LOGGER.error("Send message error", ex);
 		}
 		return false;
+	}
+
+	public SimpleDateFormat getDateFormat() {
+		return dateFormat;
 	}
 }

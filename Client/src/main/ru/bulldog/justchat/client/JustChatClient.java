@@ -25,6 +25,7 @@ public class JustChatClient extends Application {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/main_window.fxml"));
 			Parent root = loader.load();
 			MainController controller = loader.getController();
+			controller.setStage(primaryStage);
 			primaryStage.setTitle("JustChat");
 			primaryStage.setScene(new Scene(root, 1024, 768));
 			primaryStage.setOnCloseRequest(event -> controller.onStageClosed());

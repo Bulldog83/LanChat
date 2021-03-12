@@ -1,7 +1,7 @@
 package ru.bulldog.justchat.server.network;
 
 import ru.bulldog.justchat.Logger;
-import ru.bulldog.justchat.server.network.ServerNetworkHandler.ChatClient;
+import ru.bulldog.justchat.server.network.ServerNetworkHandler.ClientHandler;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -29,7 +29,7 @@ public class ChatServer implements Closeable {
 		while (!closed) {
 			try {
 				Socket clientSocket = server.accept();
-				ChatClient client = new ChatClient(clientSocket);
+				ClientHandler client = new ClientHandler(clientSocket);
 				networkHandler.onClientJoin(client);
 			} catch (IOException ex) {
 				if (!closed) {
