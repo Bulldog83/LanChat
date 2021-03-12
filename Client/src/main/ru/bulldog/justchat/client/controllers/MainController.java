@@ -93,14 +93,16 @@ public class MainController implements Initializable, MessageListener {
 	}
 
 	public void openRegistrationWindow(ActionEvent actionEvent) {
-		initRegistrationWindow();
-		if (registrationStage != null) {
-			double posX = mainStage.getX() + mainStage.getWidth() / 2.0 - registrationStage.getWidth() / 2.0;
-			double posY = mainStage.getY() + mainStage.getHeight() / 2.0 - registrationStage.getHeight() / 2.0;
-			registrationStage.setX(posX);
-			registrationStage.setY(posY);
-			registrationStage.show();
-		}
+		Platform.runLater(() -> {
+			initRegistrationWindow();
+			if (registrationStage != null) {
+				double posX = mainStage.getX() + mainStage.getWidth() / 2.0 - registrationStage.getWidth() / 2.0;
+				double posY = mainStage.getY() + mainStage.getHeight() / 2.0 - registrationStage.getHeight() / 2.0;
+				registrationStage.setX(posX);
+				registrationStage.setY(posY);
+				registrationStage.show();
+			}
+		});
 	}
 
 	public void tryLogin(ActionEvent actionEvent) {
@@ -146,23 +148,19 @@ public class MainController implements Initializable, MessageListener {
 	}
 
 	private void processSystemData(String message) {
-		String timeStamp = dateFormat.format(new Date());
-		if (message.startsWith("/private")) {
-			message = timeStamp + "[private]" + message.substring(9);
-		}
 		if (message.startsWith("/clientjoin")) {
 			String nickName = message.substring(12);
-			usersList.getItems().add(nickName);
-			onMessageReceived(timeStamp + " " + nickName + " join.");
+			Platform.runLater(() -> usersList.getItems().add(nickName));
+			onMessageReceived(nickName + " join.");
 		}
 		if (message.startsWith("/clientleave")) {
 			String nickName = message.substring(13);
-			usersList.getItems().remove(nickName);
-			onMessageReceived(timeStamp + " " + nickName + " leave.");
+			Platform.runLater(() -> usersList.getItems().remove(nickName));
+			onMessageReceived(nickName + " leave.");
 		}
 		if (message.startsWith("/users")) {
 			String[] clients = message.substring(7).split(":");
-			usersList.getItems().setAll(clients);
+			Platform.runLater(() -> usersList.getItems().setAll(clients));
 		}
 	}
 
@@ -208,6 +206,6 @@ public class MainController implements Initializable, MessageListener {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		networkHandler = new ClientNetworkHandler(this);
-		dateFormat = new SimpleDateFormat("[HH:mm:ss]");
+		dateFormat = networkHandler.getDateFormat();
 	}
 }

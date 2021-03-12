@@ -165,10 +165,10 @@ public class ServerNetworkHandler implements Closeable {
 									int idx = inputMessage.indexOf(' ', 5);
 									if (idx == -1) continue;
 									String targetNickName = inputMessage.substring(5, idx);
-									String message = nickName + ": " + inputMessage.substring(idx + 1);
+									String message = "[" + nickName + "]: " + inputMessage.substring(idx + 1);
 									networkHandler.sendMessage(this, targetNickName, message);
 								} else {
-									networkHandler.sendMessage(nickName + ": " + inputMessage);
+									networkHandler.sendMessage("[" + nickName + "]: " + inputMessage);
 								}
 							}
 						}

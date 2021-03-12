@@ -8,11 +8,14 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ClientNetworkHandler {
 
 	private final static Logger LOGGER = new Logger(ClientNetworkHandler.class);
 
+	private final SimpleDateFormat dateFormat;
 	private Socket connection;
 	private DataInputStream dataInput;
 	private DataOutputStream dataOutput;
@@ -22,6 +25,7 @@ public class ClientNetworkHandler {
 	private boolean listening = false;
 
 	public ClientNetworkHandler(MessageListener messageListener) {
+		this.dateFormat = new SimpleDateFormat("HH:mm:ss ");
 		this.messageListener = messageListener;
 	}
 
@@ -101,6 +105,9 @@ public class ClientNetworkHandler {
 	}
 
 	private void processSystemMsg(String message) {
+		if (message.startsWith("/private")) {
+			messageListener.onMessageReceived("[*]" + message.substring(9));
+		}
 		if (message.startsWith("/client") || message.startsWith("/users")) {
 			messageListener.onMessageReceived(message);
 		}
@@ -134,5 +141,9 @@ public class ClientNetworkHandler {
 			LOGGER.error("Send message error", ex);
 		}
 		return false;
+	}
+
+	public SimpleDateFormat getDateFormat() {
+		return dateFormat;
 	}
 }
