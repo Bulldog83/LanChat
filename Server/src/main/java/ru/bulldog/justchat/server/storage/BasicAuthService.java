@@ -1,6 +1,6 @@
 package ru.bulldog.justchat.server.storage;
 
-import com.sun.istack.internal.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
