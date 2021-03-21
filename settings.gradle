@@ -1,4 +1,4 @@
 rootProject.name = 'JustChat'
-include 'Common'
-include 'Client'
-include 'Server'
+include 'common'
+include 'client'
+include 'server'

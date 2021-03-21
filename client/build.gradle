@@ -11,7 +11,7 @@ application {
 }
 
 dependencies {
-    implementation project(':Common')
+    implementation project(':common')
 }
 
 test {
