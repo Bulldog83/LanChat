@@ -5,23 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbd8e42d-e71a-4235-bfcb-2b0e54be9568" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/modules/LanChat.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/ru/bulldog/justchat/client/controllers/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/ru/bulldog/justchat/client/controllers/MainController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/ru/bulldog/justchat/client/network/ClientNetworkHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/ru/bulldog/justchat/client/network/ClientNetworkHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/ru/bulldog/justchat/server/network/ServerNetworkHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ru/bulldog/justchat/server/network/ServerNetworkHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/ru/bulldog/justchat/server/storage/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ru/bulldog/justchat/server/storage/AuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/ru/bulldog/justchat/server/storage/BasicAuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ru/bulldog/justchat/server/storage/BasicAuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/ru/bulldog/justchat/server/storage/DBAuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ru/bulldog/justchat/server/storage/DBAuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/ru/bulldog/justchat/server/storage/DataBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ru/bulldog/justchat/server/storage/DataBase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/ru/bulldog/justchat/server/storage/DataBaseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ru/bulldog/justchat/server/storage/DataBaseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
