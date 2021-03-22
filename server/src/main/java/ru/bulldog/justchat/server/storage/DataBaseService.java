@@ -40,11 +40,10 @@ public class DataBaseService implements Closeable {
 	}
 
 	public boolean saveUser(UserData user) {
-		String sql = "SELECT login FROM users WHERE login=?";
-		try (PreparedStatement statement = dataBase.prepareStatement(sql)) {
-			statement.setString(1, user.getLogin());
-			if (statement.execute()) {
-				sql = "UPDATE users SET password=?, nickname=? WHERE login=?";
+		try {
+			if (isUserExists(user.getLogin())) {
+				System.out.println("User " + user + " exists.");
+				String sql = "UPDATE users SET password=?, nickname=? WHERE login=?";
 				try (PreparedStatement updateStatement = dataBase.prepareStatement(sql)) {
 					updateStatement.setString(1, user.getPassword());
 					updateStatement.setString(2, user.getNickname());
@@ -52,7 +51,8 @@ public class DataBaseService implements Closeable {
 					return updateStatement.executeUpdate() > 0;
 				}
 			} else {
-				sql = "INSERT INTO users (login, password, nickname) VALUES (?, ?, ?)";
+				System.out.println("User " + user + " not exists.");
+				String sql = "INSERT INTO users (login, password, nickname) VALUES (?, ?, ?)";
 				try (PreparedStatement insertStatement = dataBase.prepareStatement(sql)) {
 					insertStatement.setString(1, user.getLogin());
 					insertStatement.setString(2, user.getPassword());
@@ -60,6 +60,30 @@ public class DataBaseService implements Closeable {
 					return insertStatement.executeUpdate() > 0;
 				}
 			}
+		} catch (SQLException ex) {
+			DataBase.LOGGER.error("Database error", ex);
+		}
+		return false;
+	}
+
+	public boolean deleteUser(UserData user) {
+		if (user == null || !isUserExists(user.getLogin())) return false;
+		String sql = "DELETE FROM users WHERE login=? LIMIT 1";
+		try (PreparedStatement deleteStatement = dataBase.prepareStatement(sql)) {
+			deleteStatement.setString(1, user.getLogin());
+			return deleteStatement.executeUpdate() > 0;
+		} catch (SQLException ex) {
+			DataBase.LOGGER.error("Database error", ex);
+		}
+		return false;
+	}
+
+	public boolean isUserExists(String login) {
+		String sql = "SELECT login FROM users WHERE login=?";
+		try (PreparedStatement statement = dataBase.prepareStatement(sql)) {
+			statement.setString(1, login);
+			ResultSet result = statement.executeQuery();
+			return result.next();
 		} catch (SQLException ex) {
 			DataBase.LOGGER.error("Database error", ex);
 		}

@@ -28,6 +28,11 @@ public class BasicAuthService implements AuthService {
 		return true;
 	}
 
+	@Override
+	public boolean deleteUser(String login) {
+		return users.remove(login) != null;
+	}
+
 	public BasicAuthService() {
 		users.put("qwe", new UserData("qwe", "qwerty", "Qwe"));
 		users.put("wer", new UserData("wer", "12345", "Wer"));

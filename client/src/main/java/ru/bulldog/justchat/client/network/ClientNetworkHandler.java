@@ -1,15 +1,12 @@
 package ru.bulldog.justchat.client.network;
 
-import com.sun.istack.internal.Nullable;
 import ru.bulldog.justchat.Logger;
-import ru.bulldog.justchat.server.network.ChatServer;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class ClientNetworkHandler {
 
@@ -31,15 +28,17 @@ public class ClientNetworkHandler {
 
 	private void createConnection(String address) throws IOException {
 		if (!isConnected()) {
-			connection = new Socket(address, ChatServer.PORT);
+			connection = new Socket(address, 10000);
 			dataInput = new DataInputStream(connection.getInputStream());
 			dataOutput = new DataOutputStream(connection.getOutputStream());
+			connection.setSoTimeout(60000);
 		}
 	}
 
 	private boolean processRequest(MessageListener statusListener) throws IOException {
 		String requestData = dataInput.readUTF();
 		if (requestData.startsWith("/success")) {
+			connection.setSoTimeout(0);
 			String nickName = requestData.substring(9);
 			messageListener.onJoinServer(nickName);
 			messageListener.onMessageReceived("You successfully join server.");
@@ -51,6 +50,7 @@ public class ClientNetworkHandler {
 			statusListener.onMessageReceived("Server: " + requestMessage);
 		} else {
 			statusListener.onMessageReceived("Wrong server request data.");
+			LOGGER.info("Server request: " + requestData);
 		}
 		return false;
 	}
@@ -128,6 +128,10 @@ public class ClientNetworkHandler {
 	}
 
 	public boolean isConnected() {
+		if (connection != null) {
+			System.out.println("Closed: " + connection.isClosed());
+			System.out.println("Connected: " + connection.isConnected());
+		}
 		return connection != null && connection.isConnected();
 	}
 

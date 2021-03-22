@@ -2,19 +2,16 @@ package ru.bulldog.justchat.server.network;
 
 import ru.bulldog.justchat.Logger;
 import ru.bulldog.justchat.server.storage.AuthService;
-import ru.bulldog.justchat.server.storage.BasicAuthService;
+import ru.bulldog.justchat.server.storage.DBAuthService;
 
 import java.io.Closeable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class ServerNetworkHandler implements Closeable {
 
@@ -28,7 +25,7 @@ public class ServerNetworkHandler implements Closeable {
 
 	public ServerNetworkHandler() {
 		this.clients = new HashMap<>();
-		this.authService = new BasicAuthService();
+		this.authService = new DBAuthService();
 	}
 
 	public void onClientJoin(ClientHandler client) {
@@ -70,10 +67,16 @@ public class ServerNetworkHandler implements Closeable {
 							}
 						}
 					}
-					client.sendMessage("Server: Wrong auth data.");
+					client.sendMessage("/fail Wrong auth data.");
+					LOGGER.info("Client data: " + loginInfo);
 				}
-			} catch (SocketTimeoutException ex) {
-				LOGGER.info("Client disconnected by timeout: " + client.socket.getInetAddress());
+			} catch (SocketTimeoutException ignored) {
+				try {
+					LOGGER.info("Client disconnected by timeout: " + client.socket.getInetAddress());
+					client.socket.close();
+				} catch (IOException ex) {
+					LOGGER.error("Client disconnect error", ex);
+				}
 			} catch (IOException ex) {
 				if (!closed) {
 					LOGGER.error("Error client logging in", ex);

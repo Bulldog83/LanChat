@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.bulldog.justchat.Logger;
 
 import java.io.Closeable;
+import java.io.File;
 import java.io.IOException;
 import java.sql.*;
 
@@ -19,7 +20,7 @@ public class DataBase implements Closeable {
 				instance = new DataBase();
 			}
 		} catch (Exception ex) {
-			LOGGER.error("Database initialization error.");
+			LOGGER.error("Database initialization error.", ex);
 		}
 		return instance;
 	}
@@ -28,9 +29,21 @@ public class DataBase implements Closeable {
 	private final Statement statement;
 
 	private DataBase() throws Exception {
+		File dataDir = new File("data");
+		if (!dataDir.exists() && !dataDir.mkdirs()) {
+			throw new IOException("Can't create 'data' directory.");
+		}
+
 		Class.forName("org.sqlite.JDBC");
-		connection = DriverManager.getConnection("jdbc:sqlite:main.db");
+		connection = DriverManager.getConnection("jdbc:sqlite:data/main.db");
 		statement = connection.createStatement();
+
+		String initSql = "CREATE TABLE IF NOT EXISTS users (" +
+				"rawid INTEGER PRIMARY KEY AUTOINCREMENT," +
+				"login TEXT NOT NULL," +
+				"password TEXT NOT NULL," +
+				"nickname TEXT NOT NULL)";
+		statement.execute(initSql);
 	}
 
 	public PreparedStatement prepareStatement(String sql) throws SQLException {

@@ -1,5 +1,8 @@
 package ru.bulldog.justchat.server.storage;
 
+import org.sqlite.core.DB;
+import ru.bulldog.justchat.Logger;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.HashMap;
@@ -7,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 public class DBAuthService implements AuthService, Closeable {
+
+	private final static Logger LOGGER = new Logger(DBAuthService.class);
 
 	private final DataBaseService dbService;
 	private final Map<String, UserData> users;
@@ -34,16 +39,22 @@ public class DBAuthService implements AuthService, Closeable {
 
 	@Override
 	public boolean registerUser(String login, String password, String nickname) {
-		for (UserData user : users.values()) {
-			if (user.getLogin().equals(login) ||
-				user.getNickname().equals(nickname)) {
-
-				return false;
-			}
-		}
+		if (users.containsKey(login)) return false;
+		LOGGER.info("Try to register new user: " + login);
 		UserData newUser = new UserData(login, password, nickname);
 		if (dbService.saveUser(newUser)) {
 			users.put(login, newUser);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean deleteUser(String login) {
+		if (!users.containsKey(login)) return false;
+		UserData user = users.get(login);
+		if (dbService.deleteUser(user)) {
+			users.remove(login);
 			return true;
 		}
 		return false;
