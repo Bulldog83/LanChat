@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'ru.bulldog.justchat.client'
+version '1.0-SNAPSHOT'
+
+application {
+    mainClass = 'ru.bulldog.justchat.client.JustChatClient'
+}
+
+dependencies {
+    implementation project(':common')
+}
+
+test {
+    useJUnitPlatform()
+}
