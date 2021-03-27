@@ -5,6 +5,10 @@ out/
 classes/
 run/
 
+#IDE
+
+./idea
+
 # Compiled class file
 *.class
 
