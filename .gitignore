@@ -7,7 +7,7 @@ run/
 
 #IDE
 
-./idea
+.idea/
 
 # Compiled class file
 *.class
