@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class ServerNetworkHandler implements Closeable {
 
-	private final static Logger LOGGER = new Logger(ServerNetworkHandler.class);
+	private final static Logger LOGGER = Logger.getLogger(ServerNetworkHandler.class);
 	private final static int TIMEOUT = 60000;
 
 	private final Map<String, ClientHandler> clients;
@@ -75,11 +75,11 @@ public class ServerNetworkHandler implements Closeable {
 					LOGGER.info("Client disconnected by timeout: " + client.socket.getInetAddress());
 					client.socket.close();
 				} catch (IOException ex) {
-					LOGGER.error("Client disconnect error", ex);
+					Logger.logError("Client disconnect error", ex);
 				}
 			} catch (IOException ex) {
 				if (!closed) {
-					LOGGER.error("Error client logging in", ex);
+					Logger.logError("Error client logging in", ex);
 				}
 			}
 		}, "Client Login Listener").start();
@@ -110,9 +110,19 @@ public class ServerNetworkHandler implements Closeable {
 		});
 	}
 
+	public void sendMessage(ClientHandler sender, String message) {
+		Logger.logChat(sender.nickName, "ALL", message);
+		clients.values().forEach(client -> {
+			if (client.listening) {
+				client.sendMessage("[" + sender.nickName + "]: " + message);
+			}
+		});
+	}
+
 	public void sendMessage(ClientHandler sender, String nickName, String message) {
 		if (clients.containsKey(nickName)) {
-			message = "/private " + message;
+			Logger.logChat(sender.nickName, nickName, message);
+			message = "/private " + "[" + sender.nickName + "]: " + message;
 			clients.get(nickName).sendMessage(message);
 			if (!sender.nickName.equals(nickName)) {
 				sender.sendMessage(message);
@@ -168,17 +178,17 @@ public class ServerNetworkHandler implements Closeable {
 									int idx = inputMessage.indexOf(' ', 5);
 									if (idx == -1) continue;
 									String targetNickName = inputMessage.substring(5, idx);
-									String message = "[" + nickName + "]: " + inputMessage.substring(idx + 1);
+									String message = inputMessage.substring(idx + 1);
 									networkHandler.sendMessage(this, targetNickName, message);
 								} else {
-									networkHandler.sendMessage("[" + nickName + "]: " + inputMessage);
+									networkHandler.sendMessage(this, inputMessage);
 								}
 							}
 						}
 					}
 				} catch (IOException ex) {
 					if (listening) {
-						LOGGER.error("Error read message from " + nickName, ex);
+						Logger.logError("Error read message from " + nickName, ex);
 						listening = false;
 					}
 				}
@@ -189,7 +199,7 @@ public class ServerNetworkHandler implements Closeable {
 			try {
 				output.writeUTF(message);
 			} catch (IOException ex) {
-				LOGGER.error("Error send message to " + nickName, ex);
+				Logger.logError("Error send message to " + nickName, ex);
 			}
 		}
 

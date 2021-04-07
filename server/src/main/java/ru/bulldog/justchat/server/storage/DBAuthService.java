@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class DBAuthService implements AuthService, Closeable {
 
-	private final static Logger LOGGER = new Logger(DBAuthService.class);
+	private final static Logger LOGGER = Logger.getLogger(DBAuthService.class);
 
 	private final DataBaseService dbService;
 	private final Map<String, UserData> users;
