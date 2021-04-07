@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration xmlns="http://logging.apache.org/log4j/2.0/config">
+    <Properties>
+        <Property name="common">logs/common</Property>
+        <Property name="system">logs/system</Property>
+        <Property name="chat">logs/chat</Property>
+    </Properties>
+    <Appenders>
+        <RollingFile name="COMMON" fileName="${common}/latest.log" filePattern="${common}/%d{dd-MM-yyyy}-%i.log.zip" append="true">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%p][%t][%C{1}]: %m%n" />
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="5 MB" />
+                <CronTriggeringPolicy schedule="0 0 0 * * ?" />
+            </Policies>
+        </RollingFile>
+        <RollingFile name="SYSTEM" fileName="${system}/latest.log" filePattern="${system}/%d{dd-MM-yyyy}-%i.log.zip" append="true">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%p][%t][%C{1}]: %m%n" />
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="5 MB" />
+                <CronTriggeringPolicy schedule="0 0 0 * * ?" />
+            </Policies>
+        </RollingFile>
+        <RollingFile name="CHAT" fileName="${chat}/latest.log" filePattern="${chat}/%d{dd-MM-yyyy}-%i.log.zip" append="true">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%p]: %m%n" />
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="10 MB" />
+                <CronTriggeringPolicy schedule="0 0 0 * * ?" />
+            </Policies>
+        </RollingFile>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%p][%t][%C{1}](%F:%L): %m%n" />
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="system" level="info">
+            <AppenderRef ref="STDOUT" />
+            <AppenderRef ref="SYSTEM" />
+        </Logger>
+        <Logger name="chat" level="info">
+            <AppenderRef ref="CHAT" />
+        </Logger>
+        <Root level="debug">
+            <AppenderRef ref="STDOUT" />
+            <AppenderRef ref="COMMON" />
+        </Root>
+    </Loggers>
+</Configuration>

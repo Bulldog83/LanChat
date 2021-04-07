@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="afe3d428-88eb-4df5-a53e-b84408775f2f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/modules/LanChat.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/main/resources/log4j2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/ru/bulldog/justchat/client/JustChatClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/ru/bulldog/justchat/client/JustChatClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/ru/bulldog/justchat/client/controllers/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/ru/bulldog/justchat/client/controllers/MainController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/ru/bulldog/justchat/client/network/ClientNetworkHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/ru/bulldog/justchat/client/network/ClientNetworkHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/common/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/ru/bulldog/justchat/Logger.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/ru/bulldog/justchat/Logger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ru/bulldog/justchat/server/JustChatServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ru/bulldog/justchat/server/JustChatServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ru/bulldog/justchat/server/network/ChatServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ru/bulldog/justchat/server/network/ChatServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ru/bulldog/justchat/server/network/ServerNetworkHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ru/bulldog/justchat/server/network/ServerNetworkHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ru/bulldog/justchat/server/storage/DBAuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ru/bulldog/justchat/server/storage/DBAuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ru/bulldog/justchat/server/storage/DataBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ru/bulldog/justchat/server/storage/DataBase.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1qpeH6hpdrHVpd1J7VJroYKBg9T" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+  </component>
+  <component name="RunManager" selected="Application.JustChatClient">
+    <configuration name="JustChatClient" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="ru.bulldog.justchat.client.JustChatClient" />
+      <module name="JustChat.client.main" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/run/client" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="JustChatServer" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="ru.bulldog.justchat.server.JustChatServer" />
+      <module name="JustChat.server.main" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/run/server" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.JustChatServer" />
+      <item itemvalue="Application.JustChatClient" />
+    </list>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="afe3d428-88eb-4df5-a53e-b84408775f2f" name="Default Changelist" comment="" />
+      <created>1617780871644</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1617780871644</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

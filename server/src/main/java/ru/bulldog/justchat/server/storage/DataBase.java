@@ -10,7 +10,7 @@ import java.sql.*;
 
 public class DataBase implements Closeable {
 
-	public final static Logger LOGGER = new Logger(DataBase.class);
+	public final static Logger LOGGER = Logger.getLogger(DataBase.class);
 	private static DataBase instance;
 
 	@Nullable
