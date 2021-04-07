@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class JustChatServer {
 
 	private final static Scanner CONSOLE_INPUT = new Scanner(System.in);
-	public final static Logger LOGGER = new Logger(JustChatServer.class);
+	public final static Logger LOGGER = Logger.getLogger(JustChatServer.class);
 
 	public static void main(String[] args) {
 		try (ChatServer server = new ChatServer()) {

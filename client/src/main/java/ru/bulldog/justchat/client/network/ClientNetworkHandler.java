@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 
 public class ClientNetworkHandler {
 
-	private final static Logger LOGGER = new Logger(ClientNetworkHandler.class);
+	private final static Logger LOGGER = Logger.getLogger(ClientNetworkHandler.class);
 
 	private final SimpleDateFormat dateFormat;
 	private Socket connection;

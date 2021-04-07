@@ -27,7 +27,7 @@ import java.util.ResourceBundle;
 
 public class MainController implements Initializable, MessageListener {
 
-	private final static Logger LOGGER = new Logger(MainController.class);
+	private final static Logger LOGGER = Logger.getLogger(MainController.class);
 
 	@FXML
 	public TextArea txtChatArea;
@@ -156,7 +156,13 @@ public class MainController implements Initializable, MessageListener {
 		}
 		if (message.startsWith("/users")) {
 			String[] clients = message.substring(7).split(":");
-			Platform.runLater(() -> usersList.getItems().setAll(clients));
+			Platform.runLater(() -> {
+				try {
+					usersList.getItems().setAll(clients);
+				} catch (Exception ex) {
+					LOGGER.error("Update clients list error.", ex);
+				}
+			});
 		}
 	}
 

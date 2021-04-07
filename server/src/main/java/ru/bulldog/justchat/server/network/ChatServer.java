@@ -12,7 +12,7 @@ public class ChatServer implements Closeable {
 
 	public final static int PORT = 10000;
 
-	private final static Logger LOGGER = new Logger(ChatServer.class);
+	private final static Logger LOGGER = Logger.getLogger(ChatServer.class);
 
 	private final ServerNetworkHandler networkHandler;
 	private final ServerSocket server;
@@ -33,7 +33,7 @@ public class ChatServer implements Closeable {
 				networkHandler.onClientJoin(client);
 			} catch (IOException ex) {
 				if (!closed) {
-					LOGGER.error("Client connection error", ex);
+					Logger.logError("Client connection error", ex);
 				}
 			}
 		}

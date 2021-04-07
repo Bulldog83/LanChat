@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class JustChatClient extends Application {
 
-	private final static Logger LOGGER = new Logger(JustChatClient.class);
+	private final static Logger LOGGER = Logger.getLogger(JustChatClient.class);
 
 	public static void main(String[] args) {
 		launch(args);
